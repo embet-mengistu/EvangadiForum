@@ -1,9 +1,18 @@
-import React from "react";
+import React, { useContext, useState } from "react";
 import "./header.css";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "react-bootstrap";
+import { UserContext } from "../../context/UserContext";
 
-function Header() {
+function Header({ logout }) {
+  const navigate = useNavigate();
+  const [show, setShow] = useState(false);
+  const [userData, setUserData] = useContext(UserContext);
+
+  const signIn = () => {
+    navigate("/login");
+  };
+
   return (
     <div>
       <div className="nav-wrapper fixed-top">
@@ -22,7 +31,7 @@ function Header() {
             <div className="navbar-collapse collapse navbars">
               <ul className="navbar-nav nav-justified w-100 nav-fill">
                 <li className="nav-item">
-                  <a className="nav-link js-scroll-trigger" href="/mac/">
+                  <a className="nav-link js-scroll-trigger" href="#">
                     Home
                   </a>
                 </li>
@@ -31,11 +40,16 @@ function Header() {
                     How it Works
                   </a>
                 </li>
-                <button className="nav-item nav_button">
-                  <a className="nav-link js-scroll-trigger" href="#">
+                {/* //////if there is userdata(only comes when logged in)write logout bc it signed in ardy and if not write sign in(bc it not logged in) */}
+                {userData.user ? (
+                  <button onClick={logout} className="nav-item nav_button">
+                    Log Out
+                  </button>
+                ) : (
+                  <button onClick={signIn} className="nav-item nav_button">
                     Sign In
-                  </a>
-                </button>
+                  </button>
+                )}
               </ul>
             </div>
           </nav>

@@ -2,6 +2,7 @@ import React, { createContext, useState } from "react";
 
 export const UserContext = createContext();
 
+// ///declaring it globally so that we can acces it in any page we want//////
 export const UserProvider = (props) => {
   const [userData, setUserData] = useState({
     user: undefined,

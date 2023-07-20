@@ -3,13 +3,20 @@ import { useContext, useEffect, useState } from "react";
 import "./App.css";
 import { UserContext } from "./context/UserContext";
 import axios from "axios";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  useNavigate,
+} from "react-router-dom";
 import Login from "./Pages/Login/Login";
 import SignUp from "./Pages/SignUp/SignUp";
 import Home from "./Pages/Home/Home";
 import Header from "./Pages/Header/Header";
 import SharedLayout from "./SharedLayout";
 import Footer from "./Footer/Footer";
+import ToAskPage from "./Pages/Home/askingPage/ToAskPage";
+import Answer from "./Pages/Home/AnswerPage/Answer";
 
 function App() {
   const [userData, setUserData] = useContext(UserContext);
@@ -34,28 +41,21 @@ function App() {
     }
   };
 
-  const logout = () => {
-    setUserData({
-      token: undefined,
-      user: undefined,
-    });
-    localStorage.setItem("auth-token", "");
-  };
   useEffect(() => {
     checkLoggedIn();
   }, []);
 
   return (
     <Router>
-      <div>
-        <Routes>
-          <Route path="/" element={<SharedLayout />}>
-            <Route path="/signup" element={<SignUp />}></Route>
-            <Route path="/login" element={<Login />}></Route>
-            <Route path="/" element={<Home logout={logout} />}></Route>
-          </Route>
-        </Routes>
-      </div>
+      <Routes>
+        <Route path="/" element={<SharedLayout />}>
+          <Route path="/signup" element={<SignUp />}></Route>
+          <Route path="/login" element={<Login />}></Route>
+          <Route path="/" element={<Home />}></Route>
+          <Route path="/toAskPage" element={<ToAskPage />}></Route>
+          <Route path="/answer/:postID" element={<Answer />}></Route>
+        </Route>
+      </Routes>
     </Router>
   );
 }

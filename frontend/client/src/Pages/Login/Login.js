@@ -13,13 +13,21 @@ function Login() {
   const navigate = useNavigate();
   const [form, setForm] = useState({});
 
+  // ////If userData.user(state that holds the user data, including authentication details) exists, it means the user is logged in.so naviagte it to hompage
   useEffect(() => {
-    if (!userData.user) navigate("/login");
+    if (userData.user) navigate("/");
   }, [userData.user, navigate]);
 
+  // ///////targetting the valvues when it changing(when typing) and updates it on form
+  const handleChange = (e) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
+
+  // ////on handel handleSumbit
   const handleSumbit = async (e) => {
     e.preventDefault();
     try {
+      /////////posting the data coming from the form(getting updated by handleChange)
       const loginRes = await axios.post(
         "http://localhost:3000/api/users/login",
         {
@@ -27,10 +35,12 @@ function Login() {
           password: form.password,
         }
       );
+      //  then onces logged in we exract the info and update the userdata so tht we can use in info
       setUserData({
         token: loginRes.data.token,
         user: loginRes.data.user,
       });
+      // it saves the authentication token in the browser's localStorage so that the user remains authenticated even after a page refresh or navigation.
       localStorage.setItem("auth-token", loginRes.data.token);
       navigate("/");
     } catch (err) {
@@ -39,32 +49,11 @@ function Login() {
     }
   };
 
-  const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
-  };
-
-  useEffect(() => {
-    if (!userData.user) navigate("/");
-  }, [userData.user, navigate]);
-
   return (
     <div className="container">
       <div>
-        {/* <h1>Login</h1>
-      <form onSubmit={handleSumbit}>
-        <label>Email:</label>
-        <input type="text" name="email" onChange={handleChange} />
-        <br />
-        <label>Password:</label>
-        <input type="password" name="password" onChange={handleChange} />
-        <br />
-        <button>submit</button>
-      </form> */}
-
-        {/* <Link to="/signup">Create a new account</Link> */}
-
         <div className="sign_flex">
-          <div className="signin_box ">
+          <div className="signin_box  signin_boxLogin ">
             <h6 className="signin_description">Login to your account</h6>
             <div className="signin_description2">
               Don't have an account ?{" "}
